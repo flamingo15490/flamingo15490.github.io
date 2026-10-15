@@ -1,0 +1,46 @@
+{
+  "https://github.com/flamingo15490/zhikuang-industry-research": [
+    {
+      "file": "assets/projects/zhikuang-welcome.png",
+      "caption": "研究工作台首页",
+      "kind": "repository_screenshot",
+      "source_url": "https://raw.githubusercontent.com/flamingo15490/zhikuang-industry-research/main/docs/assets/welcome.png",
+      "source_label": "仓库演示截图",
+      "width": 1120,
+      "height": 460,
+      "sha256": "cf75800ebf6b92d2d66d4e1199fafbd0f8b6d4f095e6b6edb738e1f16446806b"
+    },
+    {
+      "file": "assets/projects/zhikuang-score-radar.png",
+      "caption": "五维评分与同业比较",
+      "kind": "repository_output",
+      "source_url": "https://raw.githubusercontent.com/flamingo15490/zhikuang-industry-research/main/docs/assets/score-radar.png",
+      "source_label": "项目输出图表",
+      "width": 1116,
+      "height": 451,
+      "sha256": "f4df495d9103a2cd7b1d9a3803add5afa29cb701728c4c8aa67b70fe9ea84253"
+    },
+    {
+      "file": "assets/projects/zhikuang-profit-bridge.png",
+      "caption": "财报利润桥",
+      "kind": "repository_output",
+      "source_url": "https://raw.githubusercontent.com/flamingo15490/zhikuang-industry-research/main/docs/assets/profit-bridge.png",
+      "source_label": "项目输出图表",
+      "width": 1116,
+      "height": 883,
+      "sha256": "6027d95bb64c3827be850638104f1999009216483e374f9e4bf56d83f8be68b2"
+    }
+  ],
+  "https://github.com/52HZ-GGG/Mountains_Rivers-The_Warring_States": [
+    {
+      "file": "assets/projects/shanhe-map.png",
+      "caption": "地图生成预览",
+      "kind": "development_preview",
+      "source_path": "tools/big_map_preview.png",
+      "source_label": "本地开发产物",
+      "width": 1164,
+      "height": 1022,
+      "sha256": "08174da493a7c521b93e835a5696cd7d6eaf9c06b40190e0fe417a44d8f1889e"
+    }
+  ]
+}

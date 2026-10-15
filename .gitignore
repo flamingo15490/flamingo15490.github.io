@@ -1,0 +1,10 @@
+dist/
+.local/
+.sites-runtime/
+__pycache__/
+*.pyc
+.venv/
+*.tar.gz
+*.tgz
+.env
+.env.*
