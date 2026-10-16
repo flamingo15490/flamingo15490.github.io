@@ -220,15 +220,18 @@ import {createVault} from '/private-viewer.js';
     if(points.length===1)gesture={point:points[0],start:{...transform}};
     else {const [a,b]=points;gesture={point:{x:(a.x+b.x)/2,y:(a.y+b.y)/2},distance:Math.hypot(a.x-b.x,a.y-b.y),start:{...transform}};}
   }
+  const compactMap=()=>window.matchMedia('(max-width:700px), (pointer:coarse)').matches;
   svg.addEventListener('pointerdown',event=>{
     if(event.button>0)return;
+    // Touch gestures belong to page scrolling, never to the map.
+    if(event.pointerType==='touch'||compactMap()){dragged=false;return;}
     pointers.set(event.pointerId,svgPoint(event));
     if(pointers.size===1)dragged=false;
     rebaseGesture();
     // Keep click targets intact; pointer capture is only needed for gestures.
   });
   svg.addEventListener('pointermove',event=>{
-    if(!pointers.has(event.pointerId)||!gesture)return;
+    if(event.pointerType==='touch'||compactMap()||!pointers.has(event.pointerId)||!gesture)return;
     const point=svgPoint(event);pointers.set(event.pointerId,point);
     if(pointers.size===1){
       const dx=point.x-gesture.point.x,dy=point.y-gesture.point.y;
@@ -247,7 +250,7 @@ import {createVault} from '/private-viewer.js';
   function endPointer(event) {pointers.delete(event.pointerId);rebaseGesture();if(!pointers.size)svg.classList.remove('is-dragging');}
   svg.addEventListener('pointerup',endPointer);svg.addEventListener('pointercancel',endPointer);
   svg.addEventListener('pointerleave',event=>{if(!svg.hasPointerCapture(event.pointerId))endPointer(event);});
-  svg.addEventListener('wheel',event=>{if(!event.ctrlKey)return;event.preventDefault();zoom(Math.exp(-event.deltaY*.003),svgPoint(event));},{passive:false});
+  svg.addEventListener('wheel',event=>{if(!event.ctrlKey||compactMap())return;event.preventDefault();zoom(Math.exp(-event.deltaY*.003),svgPoint(event));},{passive:false});
   svg.addEventListener('keydown',event=>{
     if(event.target!==svg)return;
     if(['+','=','-','Home','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))event.preventDefault();
@@ -267,6 +270,10 @@ import {createVault} from '/private-viewer.js';
     catch{const status=document.getElementById('map-status');status.textContent='当前浏览器暂不支持展开地图。';status.hidden=false;}
   });
   document.addEventListener('fullscreenchange',()=>document.getElementById('map-expand').setAttribute('aria-label',document.fullscreenElement?'收起地图':'展开地图'));
-  function sizeAtlas(){svg.setAttribute('viewBox',shell.clientWidth<560?'175 0 650 800':'0 0 1000 800');}
+  function sizeAtlas(){
+    svg.setAttribute('viewBox',shell.clientWidth<560?'175 0 650 800':'0 0 1000 800');
+    svg.setAttribute('aria-label',compactMap()?'中国旅行地图，34个省级行政区；点击省份查看相册，使用按钮缩放地图':'中国旅行地图，34个省级行政区；支持拖动、缩放和地点选择');
+    if(compactMap()){pointers.clear();gesture=null;dragged=false;svg.classList.remove('is-dragging');}
+  }
   window.addEventListener('resize',sizeAtlas);sizeAtlas();render();overview();
 })();

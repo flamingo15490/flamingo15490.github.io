@@ -152,7 +152,7 @@
 
 /* Self-contained travel atlas. Geometry is rendered from the official source without simplification. */
 .travel-gallery .interactive-map-shell{background:#f1f3ed;border-color:#e0e5d9;box-shadow:none}
-.travel-atlas{width:100%;height:auto;max-height:none;display:block;aspect-ratio:5/4;touch-action:none;cursor:grab;user-select:none;background:#f1f3ed;outline-offset:-3px}
+.travel-atlas{width:100%;height:auto;max-height:none;display:block;aspect-ratio:5/4;touch-action:pan-y pinch-zoom;cursor:grab;user-select:none;background:#f1f3ed;outline-offset:-3px}
 .travel-atlas.is-dragging{cursor:grabbing}
 .atlas-province{fill:#e4eadb;stroke:#f8faf4;stroke-width:1.1;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill .18s;outline:none}
 .atlas-province:focus{outline:none}
@@ -230,3 +230,5 @@
 .private-session-note{font-size:11px;color:var(--muted);margin:5px 0 25px}
 .lightbox-stage[aria-busy="true"]{opacity:.55}
 @media(max-width:560px){.gallery-tabs{gap:20px}.gallery-tabs button{font-size:13px}.private-gate{margin:35px auto 65px}.private-password-row{gap:8px}.private-password-row input{font-size:16px;padding:12px 10px}.private-password-row button{padding:12px 13px}}
+
+@media(max-width:700px),(pointer:coarse){.travel-atlas{cursor:default}}
