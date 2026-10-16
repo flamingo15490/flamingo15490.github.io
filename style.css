@@ -210,3 +210,23 @@
 .legend-visited{background:#9cb886;border:1px solid #6e8b5a}
 .legend-selected{background:#587a49;border:1px solid #38572d}
 @media(max-width:560px){.gallery-tabs{gap:25px;margin-bottom:14px}.gallery-tabs button{font-size:14px;padding-bottom:11px}.travel-map figcaption{flex-wrap:wrap}.atlas-legend{gap:10px}.other-gallery .gallery-empty{padding:60px 10px 80px}}
+
+/* Independent public and password-protected photo collections. */
+.gallery-tabs .tab-lock{width:11px;height:13px;margin-left:4px;vertical-align:-1px;opacity:.65}
+.extra-photo-count,.private-gallery-heading p{font-size:12px;color:var(--muted);margin:0 0 22px}
+.private-gate{max-width:430px;margin:55px auto 90px;text-align:center;padding:24px 5px}
+.private-lock-icon{color:#718465;margin-bottom:15px}
+.private-gate h2{font-size:27px;font-weight:400;margin:0 0 12px}
+.private-gate>p{font-size:13px;color:var(--muted);margin-bottom:26px}
+.private-password-row{display:flex;gap:10px}
+.private-password-row input{min-width:0;flex:1;border:1px solid #cdd5c6;border-radius:6px;background:#fdfcf8;font:inherit;font-size:14px;padding:12px 14px}
+.private-password-row button{white-space:nowrap;border:1px solid #587a49;border-radius:6px;background:#587a49;color:#fffdf4;font:inherit;font-size:13px;padding:12px 17px;cursor:pointer}
+.private-password-row button:disabled{opacity:.55;cursor:wait}
+.private-password-row input:focus-visible,.private-password-row button:focus-visible,#private-lock:focus-visible{outline:2px solid #587a49;outline-offset:3px}
+.private-gate .private-status{min-height:22px;font-size:12px;color:#925d47;margin:14px 0 0}
+.private-gallery-heading{display:flex;justify-content:space-between;align-items:baseline}
+.private-gallery-heading p{margin-bottom:0}
+#private-lock{background:transparent;border:0;border-bottom:1px solid #b9c4af;color:#526847;font:inherit;font-size:12px;padding:6px 0;cursor:pointer}
+.private-session-note{font-size:11px;color:var(--muted);margin:5px 0 25px}
+.lightbox-stage[aria-busy="true"]{opacity:.55}
+@media(max-width:560px){.gallery-tabs{gap:20px}.gallery-tabs button{font-size:13px}.private-gate{margin:35px auto 65px}.private-password-row{gap:8px}.private-password-row input{font-size:16px;padding:12px 10px}.private-password-row button{padding:12px 13px}}

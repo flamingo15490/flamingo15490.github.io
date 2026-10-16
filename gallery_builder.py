@@ -68,6 +68,8 @@ def render_gallery(site, write):
                 assert im.size == (photo[prefix+'width'],photo[prefix+'height'])
                 assert not im.getexif() and 'xmp' not in im.info
         assert max(photo['width'],photo['height']) <= 1600
+    from private_gallery import publish_locked_gallery
+    private_config=publish_locked_gallery(site,write)
     places = data['places']
     count = sum(len(p['photos']) for p in places)
     # Embedding JSON safely also prevents captions from becoming HTML/script.
@@ -75,14 +77,16 @@ def render_gallery(site, write):
     client_fields={'id','file','width','height','alt','caption','date','thumbnail','thumbnail_width','thumbnail_height','thumbnail_large','thumbnail_large_width','thumbnail_large_height'}
     for place in places:
         client_places.append({k:v for k,v in place.items() if k in {'id','name','province_id','province_name','city_id','city_parent_id'}} | {'photos':[{k:v for k,v in photo.items() if k in client_fields} for photo in place['photos']]})
-    client = json.dumps({'places':client_places,'other_photos':[{k:v for k,v in photo.items() if k in client_fields} for photo in other_photos],**atlas_data},ensure_ascii=False,separators=(',',':')).replace('<',r'\u003c')
+    client = json.dumps({'private_config':private_config,'places':client_places,'other_photos':[{k:v for k,v in photo.items() if k in client_fields} for photo in other_photos],**atlas_data},ensure_ascii=False,separators=(',',':')).replace('<',r'\u003c')
     esc = lambda s: html.escape(s, quote=True)
     write('dist/gallery.js', (site/'gallery.js').read_bytes())
+    write('dist/private-viewer.js',(site/'private-viewer.js').read_bytes())
     return f'''<section class="page-head wrap gallery-heading"><h1>画廊</h1></section>
 <div data-travel-gallery>
   <div class="wrap gallery-tabs" role="tablist" aria-label="画廊分类">
     <button type="button" id="gallery-travel-tab" role="tab" aria-selected="true" aria-controls="gallery-travel-panel" tabindex="0" data-gallery-view="travel">旅行足迹</button>
     <button type="button" id="gallery-other-tab" role="tab" aria-selected="false" aria-controls="gallery-other-panel" tabindex="-1" data-gallery-view="other">其他图片</button>
+    <button type="button" id="gallery-private-tab" role="tab" aria-selected="false" aria-controls="gallery-private-panel" tabindex="-1" data-gallery-view="private">个照合照 <svg class="tab-lock" viewBox="0 0 16 18" fill="none" stroke="currentColor" aria-hidden="true"><rect x="2" y="8" width="12" height="9" rx="2"/><path d="M4 8V5a4 4 0 0 1 8 0v3"/></svg></button>
   </div>
 <section class="wrap travel-gallery" id="gallery-travel-panel" role="tabpanel" aria-labelledby="gallery-travel-tab">
   <div class="travel-heading"><h2 id="travel-title" class="sr-only">旅行足迹</h2><p class="gallery-totals"><span id="place-total">{len(set(p["province_id"] for p in places))}</span> 个地区 <span aria-hidden="true">·</span> <span id="photo-total">{count}</span> 张照片</p></div>
@@ -106,9 +110,18 @@ def render_gallery(site, write):
   </section>
 </section>
 <section class="wrap other-gallery" id="gallery-other-panel" role="tabpanel" aria-labelledby="gallery-other-tab" hidden>
-  <div class="photo-grid" id="other-photo-grid"></div>
+  <p class="extra-photo-count" id="other-photo-count" role="status"></p><div class="photo-grid" id="other-photo-grid"></div>
   <div class="gallery-empty" id="other-empty"><h2>这里还没有照片</h2><p>留给旅行之外的日常与瞬间。</p></div>
 </section>
+<section class="wrap other-gallery private-gallery" id="gallery-private-panel" role="tabpanel" aria-labelledby="gallery-private-tab" hidden>
+  <div class="private-gate" id="private-gate">
+    <svg class="private-lock-icon" width="32" height="38" viewBox="0 0 32 38" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="16" width="24" height="20" rx="3"/><path d="M9 16V9a7 7 0 0 1 14 0v7"/><path d="M16 24v5"/></svg>
+    <h2>个照合照</h2><p>输入密码后查看相册。</p>
+    <form id="private-unlock-form"><label class="sr-only" for="private-password">相册密码</label><div class="private-password-row"><input id="private-password" name="password" type="password" autocomplete="off" placeholder="相册密码" required maxlength="256" aria-describedby="private-status"><button type="submit" id="private-unlock">解锁相册</button></div></form>
+    <p id="private-status" class="private-status" role="status" aria-live="polite"></p>
+  </div>
+  <div id="private-content" hidden><div class="private-gallery-heading"><p id="private-photo-count"></p><button type="button" id="private-lock">重新锁定</button></div><p class="private-session-note">离开此相册后会重新上锁。</p><div class="photo-grid" id="private-photo-grid"></div></div>
+</section>
   <dialog class="gallery-lightbox" id="gallery-lightbox" aria-label="照片查看器" aria-describedby="lightbox-caption"><div class="lightbox-toolbar"><span id="lightbox-position" aria-live="polite"></span><button type="button" id="lightbox-close" autofocus aria-label="关闭照片">关闭 ×</button></div><div class="lightbox-stage"><button type="button" id="lightbox-prev" aria-label="上一张照片">←</button><img id="lightbox-image" alt=""><button type="button" id="lightbox-next" aria-label="下一张照片">→</button></div><p id="lightbox-caption"></p></dialog>
-  <script type="application/json" id="travel-gallery-data">{client}</script><script defer src="/gallery.js"></script>
+  <script type="application/json" id="travel-gallery-data">{client}</script><script type="module" src="/gallery.js"></script>
 </div>'''
